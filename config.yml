@@ -32,5 +32,4 @@ instagram: !!map
   clientId: 'ea2679a4073c4809919836b18e91b257'
   clientSecret : '87e2890a23fd4defb7fc2cfc76f43d15'
   grantType : 'authorization_code'
-  redirectURL: 'http://CopyCatLoadBalancer-426137485.us-east-1.elb.amazonaws.com:80/api/v0/instagram/login'
-  
+  redirectURL: 'http://copycatloadbalancer-426137485.us-east-1.elb.amazonaws.com/api/v0/instagram/login'
