@@ -1,0 +1,82 @@
+---
+# This YAML file is used to store configuration parameter for CopyCat backend.
+# For a more detailed explanation of each parameter, please refer to CopyCat backend documentation.
+# Format is follow YAML standard.
+
+# Load Balancer
+loadBalancer : 'CopyCatLoadBalancer-426137485.us-east-1.elb.amazonaws.com'
+
+# MongoDB replica set address
+replicaAddr: !!seq
+ - '54.88.43.114:27017'
+ - '52.23.175.93:27017'
+ - '54.165.55.62:27017'
+databaseName: test
+replicationSetName: copycat_replication_set_0
+replicationSetStrategy: ping
+
+# timeline style query
+timelineQueryMaxCount: 200
+timelineQueryDefaultCount: 20
+
+# AWS credential
+credential: !!map
+  accessKeyId: AKIAIMLE76URPMCTIAXA
+  secretAccessKey: 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
+  region: us-east-1
+
+# server port
+httpPort: 3001
+httpsPort: 443
+
+# s3 image bucket name
+s3ImageBucket: !!map
+  name: copycatimage
+
+# instagram
+instagram: !!map
+  clientId: 'ea2679a4073c4809919836b18e91b257'
+  clientSecret : '87e2890a23fd4defb7fc2cfc76f43d15'
+  grantType : 'authorization_code'
+  redirectURL: 'http://copycatloadbalancer-426137485.us-east-1.elb.amazonaws.com/api/v0/instagram/login'
+
+# test secret code
+secret: 'copycattest'
+copycattestId: '5737e97e0c7956dc7d4ada47'
+
+# compress parameter
+maxWidth: 800
+maxHeight: 800
+
+# user
+anonymousUserName: 'anonymous'
+anonymousProfilePictureUrl: 'https://pbs.twimg.com/profile_images/471316589996806145/0oKVzgtV.jpeg'
+anonymousUserId: '5750b56d7b2d281600a5af06'
+  
+# google cloud vision api key
+cloudVisionApiKey: 'AIzaSyA8WAYHLpgXjB2ajsgscSiFlOl05-lTvEA'
+
+# clarifai access token
+clarifaiClientId: 'hmWiyrcb6MyQlAIazk2GQe0BECEOXXZsRwdPbvRn'
+clarifaiClientSecret: 'ie2kcx3_vHyK7lAnJetLqw5hfbMhEZ9m_C8g3976'
+
+# Flickr api key
+flickrApiKey: 'f91a179a286be8256e0ca7624f254642'
+
+# 500px consumer key
+consumerKey500px: '1f9RPmVvLJIhtdq6CsSiVUVuCQsaNmeqy0r79A6b'
+
+# Unsplash client id
+unsplashClientId: '6aeca0a320939652cbb91719382190478eee706cdbd7cfa8774138a00dd81fab'
+
+# Search photo number maximum
+maximumSearchPhotoNumber: 50
+
+# Crawl images from a website
+splashCrawlerHttpPort: 8050 # default setting of official Splash docker image
+splashCrawlerHttpsPort: 8051 # default setting of official Splash docker image
+splashCrawlerTcpPort: 5023 # default setting of official Splash docker image
+splashCrawlerTimeout: 30 # seconds
+splashCrawlerWait: 0.5 # seconds
+crawlerImageMinimumWidth: 200 # px
+crawlerImageMinHeight: 150 # px

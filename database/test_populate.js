@@ -20,6 +20,7 @@ db.once('open', function() {
   
   //save test photos
   var photoIdList = [];
+  var fakePhotoNum = 100;
   var createPhotos = function() {
     var photoUrlList = [
       'https://s3.amazonaws.com/copycatimage/elephant.jpg',
@@ -28,16 +29,16 @@ db.once('open', function() {
       'https://s3.amazonaws.com/copycatimage/portal.jpg',
       'https://s3.amazonaws.com/copycatimage/people.jpg'
     ];
-    for(var i = 0; i < photoUrlList.length; i++) {
+    for(var i = 0; i < fakePhotoNum; i++) {
       Photo.create({
-          imageUrl: photoUrlList[i],
+          imageUrl: photoUrlList[i % photoUrlList.length],
           ownerId: superUserId,
           tagList: ['cool', 'awesome', 'interesting']
       }, function(err, photo) {
         errHandle(err);
         photoIdList.push(photo._id);
-        console.log(photo);
-        if(photoIdList.length === photoUrlList.length) {
+        console.log("%j", photo);
+        if(photoIdList.length === fakePhotoNum) {
           createAlbums();
         }
       });
@@ -46,21 +47,22 @@ db.once('open', function() {
 
   //save test albums
   var albumIdList = [];
-  var albumImageUrl = 'https://s3.amazonaws.com/copycatimage/cmu.jpg';
+  var albumImageUrl = ['https://s3.amazonaws.com/copycatimage/cmu.jpg', 'https://s3.amazonaws.com/copycatimage/IMG_0407.JPG'];
   var albumNameList = ['nature', 'documentary', 'sky', 'slow motion']
+  var fakeAlbumNum = 100;
   var createAlbums = function() {
-    for(var i = 0; i < albumNameList.length; i++) {
+    for(var i = 0; i < fakeAlbumNum; i++) {
       Album.create({
-          name: albumNameList[i],
-          imageUrl: albumImageUrl,
-          photoIdList:[photoIdList[i], photoIdList[i+1]],
+          name: albumNameList[i % albumNameList.length],
+          imageUrl: albumImageUrl[i % albumImageUrl.length],
+          photoIdList:[photoIdList[i % photoIdList.length], photoIdList[(i+1) % photoIdList.length]],
           ownerId:superUserId,
           tagList: ['wonderful', 'great', 'amazing']
       }, function(err, album) {
         errHandle(err);
         albumIdList.push(album._id);
-        console.log(album);
-        if(albumIdList.length === albumNameList.length) {
+        console.log("%j", album);
+        if(albumIdList.length === fakeAlbumNum) {
           createEditorChoice();
         }
       });

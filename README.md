@@ -1,3 +1,4 @@
-# CopyCat Server
+# CopyCat Server Backend
 
-CopyCat Server. Powered by MongoDB, Mongoose, Express.js. Require python package "validators" & "requests"
+CopyCat copy right.
+

@@ -2,3 +2,5 @@ img/
 node_modules/
 *.swp
 *.swo
+testImage/
+*.logfile

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node --use_strict server.js | ./node_modules/bunyan/bin/bunyan"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +12,29 @@
     "async": "^1.5.2",
     "express": "^4.13.4",
     "mongoose": "^4.4.4",
-    "python-shell": "^0.3.0"
+    "python-shell": "^0.3.0",
+    "body-parser": "^1.15.0",
+    "aws-sdk": "^2.2.41",
+    "request": "^2.67.0",
+    "gm": "^1.21.1",
+    "eslint": "^2.2.0",
+    "bunyan": "^1.8.0",
+    "node-uuid": "^1.4.6",
+    "bluebird": "^3.3.4",
+    "sprintf-js": "^1.0.3",
+    "js-yaml": "^3.5.5",
+    "nodemailer": "^2.3.1",
+    "argparse": "^1.0.7",
+    "mocha": "^2.5.0",
+    "chai": "^3.5.0",
+    "es6-error": "^3.0.0",
+    "clarifai": "^1.2.1",
+    "cheerio": "^0.20.0"
+  },
+  "devDependencies": {
+    "eslint": "^2.7.0",
+    "eslint-config-airbnb": "^6.2.0",
+    "eslint-plugin-react": "^4.3.0",
+    "nock": "^8.0.0"
   }
 }

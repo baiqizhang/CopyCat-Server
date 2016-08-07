@@ -1,0 +1,14 @@
+shell: 
+
+db.posts.insert({})
+db.posts.find({"_id":ObjectId("568b0969e4017f5f784af4f9")})
+db.posts.remove({})
+
+Node:
+
+Post.find({ "_id": "568b0969e4017f5f784af4f9"},function(err,result){console.log(result._id)});
+
+ Post.find({ "_id": "568b0969e4017f5f784af4f9"},function(err,result){console.log(result[0]._id)});
+
+Post.find({"timestamp": { $gt: date}},function(err, result) {console.log(result)});
+
