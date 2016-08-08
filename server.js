@@ -15,6 +15,7 @@
 
 const express = require('express');
 const server = express();
+server.use(express.static('public'));
 //const routerV0 = require('./api/v0/router.js');
 const routerV1 = require('./api/v1/router.js');
 const config = require('./config.js');

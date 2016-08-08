@@ -1,10 +1,12 @@
 const express = require('express');
 const router = new express.Router();
 const request = require('request');
+const fs = require("fs");
+const path = require("path");
 const util = require('util');
 const config = require('../../../config.js');
 const Log = require('../../../utils/logger.js');
-
+const appDir = path.dirname(require.main.filename);
 /**
  * Error handler and self-defined error class.
  */
@@ -16,7 +18,7 @@ const BadRequestError = errLib.BadRequestError;
  * Bluebird made promise easy
  */
 const Promise = require('bluebird');
-
+const prefix = "http://ec2-52-42-208-246.us-west-2.compute.amazonaws.com:3001";
 /**
  * Given some search labels, separated by commas, return
  * relative photo from popular image website.
@@ -37,6 +39,8 @@ const Promise = require('bluebird');
  *   created_at: 'yyyy-MM-ddTHH:mm:ss-xx:xx',
  * }
  */
+var popularTag = new Set(["pose"]);
+
 router.route('/')
 .get((req, res) => {
   const log = new Log(req, res);
@@ -62,19 +66,39 @@ router.route('/')
         photos.push({
           urls: {
             regular: d[i].urls.regular,
+            small: d[i].urls.small
           },
-          user: {
-            name: util.format('%s (Unsplash)', d[i].user.name),
-            profile_image: d[i].user.profile_image,
-          },
-          created_at: d[i].created_at,
+          created_at: d[i].created_at
         });
       }
       resolve(photos);
     }));
   };
-
-  const getFlickrPhotos = function getFlickrPhotos(_labels) {
+  const getLocalPhotos = function getCachedPhotos(_labels) {
+    log.info('Request photos from local file sys');
+    const labelString = _labels;
+    var promises = [];
+    for (let label of _labels) {
+      if (popularTag.has(label)) {
+        promises.push(new Promise((resolve) => fs.readdir(path.join(appDir,
+            "public", "popularTags", label), (err, files) => {
+          const photos = [];
+          for (let i = 0; i < files.length; i++) {
+            photos.push({
+              urls: {
+                regular: prefix + "/popularTags/" + label + "/" + files[i],
+                small: prefix + "/popularTags/" + label + "/" + files[i]
+              },
+              created_at: Date.now()
+            });
+          }
+          resolve(photos);
+        })));
+      }
+    }
+    return promises;
+  };
+ /* const getFlickrPhotos = function getFlickrPhotos(_labels) {
     log.info('Request photos from flickr.com');
     const labelString = _labels.join(',').replace(/\s+/g, '%20');
     return new Promise((resolve) => request({
@@ -136,25 +160,20 @@ router.route('/')
       resolve(photos);
     }));
   };
+**/
+  var localPromises = getLocalPhotos(labels);
+  localPromises.push(getUnsplashPhotos(labels));
+  Promise.all(
+    localPromises
+    //getFlickrPhotos(labels),
+    //get500PXPhotos(labels),
+  ).then((data) => {
 
-  Promise.join(
-    getUnsplashPhotos(labels),
-    getFlickrPhotos(labels),
-    get500PXPhotos(labels),
-    (unsplashPhotos, flickrPhotos, px500Photos) => {
-      let rawPhotos = [];
-      rawPhotos = rawPhotos.concat(unsplashPhotos);
-      rawPhotos = rawPhotos.concat(px500Photos);
-      rawPhotos = rawPhotos.concat(flickrPhotos);
-
-      const photos = [];
-      for (let i = 0; i < Math.min(config.maximumSearchPhotoNumber, rawPhotos.length); ++i) {
-        photos.push(rawPhotos[i]);
-      }
-
-      return photos;
-    })
-  .then((photos) => {
+    let rawPhotos = [].concat.apply([], data);
+    const photos = [];
+    for (let i = 0; i < Math.min(config.maximumSearchPhotoNumber, rawPhotos.length); ++i) {
+      photos.push(rawPhotos[i]);
+    }
     res.status(200).send(photos);
     log.logRes();
   })

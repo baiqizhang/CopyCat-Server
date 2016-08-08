@@ -73,7 +73,7 @@ router.route('/:id')
  */
 // photo should no more than 5mb
 router.use(bodyParser.json({
-  limit: '5mb',
+  limit: '5mb'
 }));
 router.route('/')
 .post((req, res) => {
