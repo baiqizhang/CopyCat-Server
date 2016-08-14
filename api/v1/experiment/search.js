@@ -13,7 +13,7 @@ const appDir = path.dirname(require.main.filename);
 const errLib = require('../../../utils/error.js');
 const errorHandler = errLib.errorHandler;
 const BadRequestError = errLib.BadRequestError;
-
+const pubDir = path.join(appDir, "public", "popularTags");
 /**
  * Bluebird made promise easy
  */
@@ -39,7 +39,25 @@ const prefix = "http://ec2-52-42-208-246.us-west-2.compute.amazonaws.com:3001";
  *   created_at: 'yyyy-MM-ddTHH:mm:ss-xx:xx',
  * }
  */
-var popularTag = new Set(["pose"]);
+
+var popularTag = null;
+
+const updateList = function (dir) {
+  fs.readdir(dir, (err, files) => {
+    popularTag = new Set();
+    for (let i = 0; i < files.length; i++) {
+      popularTag.add(files[i]);
+    }
+  });
+};
+
+fs.watch(pubDir, {
+  recursive: true
+}, () => {
+  updateList(pubDir);
+});
+
+updateList(pubDir);
 
 router.route('/')
 .get((req, res) => {
@@ -58,7 +76,7 @@ router.route('/')
     const labelString = _labels.join(',').replace(/\s+/g, '%20');
     return new Promise((resolve) => request({
       url: util.format('https://api.unsplash.com/photos/search?query=%s&client_id=%s', labelString, config.unsplashClientId),
-      method: 'GET',
+      method: 'GET'
     }, (err, response, body) => {
       const d = JSON.parse(body);
       const photos = [];
@@ -80,8 +98,7 @@ router.route('/')
     var promises = [];
     for (let label of _labels) {
       if (popularTag.has(label)) {
-        promises.push(new Promise((resolve) => fs.readdir(path.join(appDir,
-            "public", "popularTags", label), (err, files) => {
+        promises.push(new Promise((resolve) => fs.readdir(path.join(pubDir, label), (err, files) => {
           const photos = [];
           for (let i = 0; i < files.length; i++) {
             photos.push({
@@ -171,7 +188,7 @@ router.route('/')
 
     let rawPhotos = [].concat.apply([], data);
     const photos = [];
-    for (let i = 0; i < Math.min(config.maximumSearchPhotoNumber, rawPhotos.length); ++i) {
+    for (let i = 0; i < rawPhotos.length; ++i) {
       photos.push(rawPhotos[i]);
     }
     res.status(200).send(photos);
@@ -182,6 +199,10 @@ router.route('/')
   });
 
   return null;
+});
+
+router.route("/updateList").get((req, res) => {
+  res.send(Array.from(popularTag));
 });
 
 module.exports = router;
