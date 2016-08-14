@@ -202,7 +202,9 @@ router.route('/')
 });
 
 router.route("/updateList").get((req, res) => {
-  res.send(Array.from(popularTag));
+  res.send({
+    tags : Array.from(popularTag)
+  });
 });
 
 module.exports = router;
