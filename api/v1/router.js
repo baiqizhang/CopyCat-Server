@@ -11,6 +11,7 @@ const router = new express.Router();
 const smartExperiment = require('./experiment/smart.js');
 const searchExperiment = require('./experiment/search.js');
 const logExperiment = require('./experiment/logger.js');
+const whatsnewExperiment = require('./experiment/whatsnew.js');
 //router.use('/photos', photos);
 //router.use('/timeline', timeline);
 //router.use('/heartbeat', heartbeat);
@@ -21,5 +22,6 @@ const logExperiment = require('./experiment/logger.js');
 router.use('/smart', smartExperiment);
 router.use('/search', searchExperiment);
 router.use('/log', logExperiment);
+router.use('/whatsnew', whatsnewExperiment);
 
 module.exports = router;
