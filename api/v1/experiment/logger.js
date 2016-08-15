@@ -7,10 +7,14 @@ const path = require("path");
 const fs = require("fs");
 
 const logfile = path.join(path.dirname(require.main.filename), "log", "copycat-search.log");
-let summary = {};
+try {
+    var summary = JSON.parse(fs.readFileSync(logfile, 'utf8'));
+} catch (e) {
+    summary = {};
+}
 router.route('/')
     .get((req, res) => {
-        const word = req.query.keyword;
+        const word = req.query.keyword.toLowerCase();
         if (summary.hasOwnProperty(word)) {
             summary[word] += 1;
         } else {
