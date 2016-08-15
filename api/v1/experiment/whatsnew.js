@@ -31,7 +31,7 @@ router.route("/").get((req, res) => {
     };
     if (version < changeObj.curVersion) {
         for (var i = version + 1; i <= changeObj.curVersion; i++) {
-            result.html += "<li style='font-size: 14px;'>" + changeObj.histories[i + ""][lang] + "</li>";
+            result.html += "<li style='font-size: 24px;'>" + changeObj.histories[i + ""][lang] + "</li>";
         }
     }
     result.html += "</ol></body>"
