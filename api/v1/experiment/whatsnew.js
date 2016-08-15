@@ -27,13 +27,14 @@ router.route("/").get((req, res) => {
     let lang = req.query.lang.indexOf("en") != -1 ? "cn" : "eng";
     let result = {
         curVersion: changeObj.curVersion,
-        html: ""
+        html: '<body style="background-color: #f7f7f7;">'
     };
     if (version < changeObj.curVersion) {
         for (var i = version + 1; i <= changeObj.curVersion; i++) {
             result.html += changeObj.histories[i + ""][lang];
         }
     }
+    result.html += "</body>"
     res.json(result);
 });
 
