@@ -5,3 +5,4 @@ node_modules/
 testImage/
 *.logfile
 .idea/*
+log/*

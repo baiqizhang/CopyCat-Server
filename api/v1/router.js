@@ -10,7 +10,7 @@ const router = new express.Router();
 //const users = require('./users.js');
 const smartExperiment = require('./experiment/smart.js');
 const searchExperiment = require('./experiment/search.js');
-
+const logExperiment = require('./experiment/logger.js');
 //router.use('/photos', photos);
 //router.use('/timeline', timeline);
 //router.use('/heartbeat', heartbeat);
@@ -20,6 +20,6 @@ const searchExperiment = require('./experiment/search.js');
 //router.use('/users', users);
 router.use('/smart', smartExperiment);
 router.use('/search', searchExperiment);
-//router.use('/crawl', require('./crawl.js'));
+router.use('/log', logExperiment);
 
 module.exports = router;
