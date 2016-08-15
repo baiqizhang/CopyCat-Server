@@ -27,7 +27,7 @@ router.route("/").get((req, res) => {
     let lang = req.query.lang.indexOf("en") != -1 ? "cn" : "eng";
     let result = {
         curVersion: changeObj.curVersion,
-        html: '<body style="background-color: #f7f7f7;">'
+        html: '<body style="background-color: #c7c7cc;">'
     };
     if (version < changeObj.curVersion) {
         for (var i = version + 1; i <= changeObj.curVersion; i++) {
